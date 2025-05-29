@@ -1,14 +1,23 @@
 
 #### GUIDE
-
+#### 
 ## create/build the image locally
 # docker build -t [some-name] .
 
 ## run the image with the environment variables
-# docker run -e NEXT_PUBLIC_TREASURY_ADDRESS="your_address" -e NEXT_PUBLIC_RPC_URL="your_url" [some-name]
+# docker run -p 3000:3000 -e NEXT_PUBLIC_TREASURY_ADDRESS="your_address" -e NEXT_PUBLIC_RPC_URL="your_url" [some-name]
+# You should see this in the terminal 
+# > nextjs-xion-abstraxion-examples@0.1.0 start
+# > next start -H 0.0.0.0
 
-## Open http://localhost:3000
+#    ▲ Next.js 14.0.0
+#    - Local:        http://localhost:3000
+#    - Network:      http://0.0.0.0:3000
 
+#  ✓ Ready in 284ms
+
+## Now open http://localhost:3000
+#### 
 ### GUIDE
 
 
@@ -43,4 +52,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the application in production mode
-CMD ["npm", "start"]
+CMD ["npm", "run", "start", "--", "-H", "0.0.0.0"]
