@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@burnt-labs/abstraxion": "^1.0.0-alpha.62",
+    "@burnt-labs/abstraxion": "^1.0.0-alpha.65",
     "next": "14.0.0",
     "react": "^18",
     "react-dom": "^18"

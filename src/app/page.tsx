@@ -2,14 +2,13 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import {
-  Abstraxion,
   useAbstraxionAccount,
   useAbstraxionSigningClient,
   useAbstraxionClient,
-  useModal,
 } from "@burnt-labs/abstraxion";
 import { Button } from "@burnt-labs/ui";
 import "@burnt-labs/ui/dist/index.css";
+import LoadingModal from "@/components/LoadingModal";
 import type { ExecuteResult } from "@cosmjs/cosmwasm-stargate";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "";
@@ -27,14 +26,14 @@ type QueryResult = {
 
 export default function Page(): JSX.Element {
   // Abstraxion hooks
-  const { data: account } = useAbstraxionAccount();
+  const { data: account, login } = useAbstraxionAccount();
   const { client, signArb, logout } = useAbstraxionSigningClient();
   const { client: queryClient } = useAbstraxionClient();
 
   // State variables
   const [loading, setLoading] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [executeResult, setExecuteResult] = useState<ExecuteResultOrUndefined>(undefined);
-  const [, setShowModal]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useModal();
   const [queryResult, setQueryResult] = useState<QueryResult>({});
   const [jsonInput, setJsonInput] = useState<string>("");
   const [selectedAddress, setSelectedAddress] = useState<string>("");
@@ -189,10 +188,21 @@ export default function Page(): JSX.Element {
         <div className="flex w-1/3 flex-col gap-4">
           <Button 
             fullWidth 
-            onClick={() => setShowModal(true)} 
+            onClick={async () => {
+              if (!account?.bech32Address) {
+                setIsLoggingIn(true);
+                try {
+                  await login();
+                } catch (error) {
+                  console.error('Login failed:', error);
+                } finally {
+                  setIsLoggingIn(false);
+                }
+              }
+            }} 
             structure="base"
           >
-            {account?.bech32Address ? "VIEW ACCOUNT" : "CONNECT"}
+            {account?.bech32Address ? account.bech32Address.slice(0, 10) + "..." + account.bech32Address.slice(-6) : "CONNECT"}
           </Button>
 
           {client && (
@@ -371,7 +381,8 @@ export default function Page(): JSX.Element {
         </div>
       </div>
 
-      <Abstraxion onClose={() => setShowModal(false)} />
+      <LoadingModal isOpen={isLoggingIn} message="Connecting to your wallet..." />
+      <LoadingModal isOpen={loading} message="Processing transaction..." />
     </main>
   );
 }

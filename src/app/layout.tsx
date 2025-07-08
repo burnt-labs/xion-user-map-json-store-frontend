@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import {AbstraxionProvider} from "@burnt-labs/abstraxion";
 
-import "@burnt-labs/abstraxion/dist/index.css";
 import "@burnt-labs/ui/dist/index.css";
 
 const inter = Inter({ subsets: ['latin'] })
