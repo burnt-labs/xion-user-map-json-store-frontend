@@ -22,11 +22,6 @@ export default function LoadingModal({ isOpen, message = "Connecting to wallet..
           <p className="text-gray-700 dark:text-gray-300 text-center font-medium">
             {message}
           </p>
-          
-          {/* Additional info */}
-          <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-            Please wait while we connect your wallet
-          </p>
         </div>
       </div>
     </div>
